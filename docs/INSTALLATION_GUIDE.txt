@@ -1,0 +1,93 @@
+================================================================================
+  UBUNTU SERVER INSTALLATION & DATABASE SETUP GUIDE
+  Project: Network Support System
+================================================================================
+
+--------------------------------------------------------------------------------
+1. DATABASE CREATION (MariaDB / MySQL on Ubuntu)
+--------------------------------------------------------------------------------
+
+Step A: Open Ubuntu Terminal / SSH and run:
+    sudo mysql -u root -p
+
+Step B: Enter these SQL commands one by one:
+
+    CREATE DATABASE IF NOT EXISTS network_support CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+    CREATE USER IF NOT EXISTS 'admin_user'@'localhost' IDENTIFIED BY 'StrongPassword123';
+
+    GRANT ALL PRIVILEGES ON network_support.* TO 'admin_user'@'localhost';
+
+    FLUSH PRIVILEGES;
+
+    EXIT;
+
+(Note: You can change 'StrongPassword123' to any password you prefer)
+
+
+--------------------------------------------------------------------------------
+2. FOLDER PERMISSIONS ON UBUNTU (Run in Terminal)
+--------------------------------------------------------------------------------
+
+Run these two commands so the web installer can create config.php:
+
+    sudo chown -R $USER:www-data /var/www/html/network_support
+    sudo chmod -R 775 /var/www/html/network_support
+
+
+--------------------------------------------------------------------------------
+3. FILE UPLOAD (WinSCP / FileZilla)
+--------------------------------------------------------------------------------
+
+- Connect via SFTP to your server IP on Port 22.
+- Upload all project files to:
+    /var/www/html/network_support/
+
+- If WinSCP shows a permission warning popup:
+    Click "Skip all"
+
+
+--------------------------------------------------------------------------------
+4. WEB INSTALLATION WIZARD (In Browser)
+--------------------------------------------------------------------------------
+
+Open your web browser and go to:
+    http://192.168.16.127/network_support/install/
+
+Step 1: Requirements Check
+    - Confirm all items show "✓ Pass".
+    - Click "Continue →"
+
+Step 2: Database Configuration
+    - Database Host : localhost
+    - Port          : 3306
+    - Database Name : network_support
+    - Username      : admin_user
+    - Password      : StrongPassword123
+    - Click "🔌 Test Connection" (it should say "Connected successfully!")
+    - Click "Continue →"
+
+Step 3: Administrator Account Setup
+    - Full Name     : System Administrator
+    - Username      : admin
+    - Email         : admin@example.com
+    - Password      : (Set your desired admin password - min 8 chars)
+    - Confirm Pass  : (Re-type password)
+    - Click "Review & Install →"
+
+Step 4: Installation Progress
+    - The installer will automatically import tables and create config.php.
+    - Progress will reach 100%.
+
+Step 5: Completion
+    - Click "Go to Login Page →"
+    - Sign in with your newly created admin credentials!
+
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+- "config.php Writable: Not Writable ✗" -> Run: sudo chmod -R 775 /var/www/html/network_support
+- Missing PHP extensions -> Run: sudo apt install php-mysql php-mbstring && sudo systemctl restart apache2
+- Need to reinstall? -> Delete install/installed.lock and reload install page
+================================================================================

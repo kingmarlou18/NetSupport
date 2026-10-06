@@ -1,0 +1,18 @@
+/sms_config.local.php
+
+# Environment & OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs and temporary files
+*.log
+error_log
+php_error.log
+*.bak
